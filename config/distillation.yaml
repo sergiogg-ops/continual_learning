@@ -1,0 +1,11 @@
+teacher: models/old_model.pth
+distillation: 0.3
+batch_size: 32
+lr: 0.001
+max_epochs: 10
+val_check_interval: 0.2
+size: 10000
+early_stop: true
+patience: 3
+experiment: distilation
+seed: 42

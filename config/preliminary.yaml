@@ -1,6 +1,8 @@
 batch_size: 32
 lr: 0.001
-max_steps: 3000
+max_steps: 3000000
 size: 10000
+early_stop: true
+patience: 3
 experiment: preliminary
 seed: 42
