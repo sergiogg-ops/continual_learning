@@ -41,11 +41,11 @@ class LossFn(torch.nn.Module):
         return loss
 
 class Model(torch.nn.Sequential):
-    def __init__(self):
+    def __init__(self, hidden_size=2):
         super(Model, self).__init__(
-            nn.Linear(1,100),
+            nn.Linear(1,hidden_size),
             nn.ReLU(),
-            nn.Linear(100,1),
+            nn.Linear(hidden_size,1),
             nn.Sigmoid()
         )
 
@@ -64,7 +64,7 @@ class OldData(torch.utils.data.Dataset):
 class NewData(torch.utils.data.Dataset):
     def __init__(self, size=1000):
         self.size = size
-        self.x = torch.randn(size, 1) * 1000
+        self.x = torch.randn(size, 1) * 10000
         self.y = (self.x > 0).float()
 
     def __len__(self):
@@ -122,7 +122,6 @@ class LitModel(pl.LightningModule):
 
     def training_step(self, batch, batch_idx):
         src, ref = batch
-        print()
         if self.teacher:
             with torch.no_grad():
                 teacher_pred = self.teacher(src)
@@ -142,7 +141,7 @@ class LitModel(pl.LightningModule):
         acc = ((pred > 0.5).float() == ref).float().cpu().mean()
         self.log(f'val_accuracy', acc)
 
-    def test_step(self, batch, batch_idx, dataloader_idx=0):
+    def test_step(self, batch, batch_idx, dataloader_idx):
         src, ref = batch
         pred = self(src)
         loss = self.criterion(pred, ref)
@@ -156,13 +155,12 @@ class LitModel(pl.LightningModule):
 
 def main():
     args = parse_args()
-    if args.teacher is not None:
-        print(f"Loading teacher model from {args.teacher}")
+    if args.teacher:
         teacher_model = Model()
-        # teacher_model.load_state_dict(torch.load(args.teacher))
-        # teacher_model.eval()
-        # for param in teacher_model.parameters():
-        #     param.requires_grad = False
+        teacher_model.load_state_dict(torch.load(args.teacher))
+        teacher_model.eval()
+        for param in teacher_model.parameters():
+            param.requires_grad = False
     
     # seed everthing
     pl.seed_everything(42)
@@ -172,7 +170,7 @@ def main():
     if args.load:
         model.load_state_dict(torch.load(args.load))
     model = LitModel(model=model, 
-                        teacher=teacher_model if args.teacher is not None else None,
+                        teacher=teacher_model if args.teacher else None,
                         distillation_factor=args.distillation,
                         lr=args.lr)
     logger = pl.loggers.TensorBoardLogger(os.path.join("logs", args.experiment))
@@ -189,8 +187,7 @@ def main():
                          max_time=args.max_time,
                          val_check_interval=float(args.val_check_interval),
                          logger=logger, 
-                         callbacks=callbacks, num_sanity_val_steps=0)
-    #trainer.validate(model, datamodule=data_module)
+                         callbacks=callbacks)
     trainer.fit(model, datamodule=data_module)
     trainer.test(model, datamodule=data_module)
     torch.save(model.model.state_dict(), os.path.join("logs", args.experiment, "final_model.pth"))
