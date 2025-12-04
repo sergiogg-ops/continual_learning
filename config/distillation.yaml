@@ -1,5 +1,5 @@
-teacher: logs/preliminary/final_model.pth
-load: logs/preliminary/final_model.pth
+teacher: Helsinki-NLP/opus-mt-es-en
+model: Helsinki-NLP/opus-mt-es-en
 distillation: 0.1
 batch_size: 32
 lr: 0.001
