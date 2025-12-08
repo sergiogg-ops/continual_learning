@@ -1,0 +1,15 @@
+teacher: vgg_mnist_final/model.safetensors
+model: vgg_mnist_final/model.safetensors
+fim: vgg_mnist_final/fisher.pt
+#distillation: 0.1
+#ewc: 2000
+batch_size: 16
+accum_steps: 2
+lr: 1e-5
+max_epochs: 10
+val_check_interval: 0.2
+size: 10000
+early_stop: true
+patience: 3
+experiment: ewc
+seed: 42

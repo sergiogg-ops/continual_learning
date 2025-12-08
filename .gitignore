@@ -209,3 +209,4 @@ __marimo__/
 logs/*
 data/*
 models/*
+vgg_mnist/*

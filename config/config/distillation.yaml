@@ -1,0 +1,12 @@
+teacher: logs/preliminary/final_model.pth
+load: logs/preliminary/final_model.pth
+distillation: 0.1
+batch_size: 32
+lr: 0.001
+max_epochs: 10
+val_check_interval: 0.2
+size: 10000
+early_stop: true
+patience: 3
+experiment: distillation
+seed: 42
