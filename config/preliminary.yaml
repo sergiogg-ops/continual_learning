@@ -1,8 +1,35 @@
+# Preliminary Training Configuration
+# This configuration is for training a model on the first task
+# No continual learning techniques (EWC or distillation) are applied
+
+# Model configuration
+model: Helsinki-NLP/opus-mt-es-en
+
+# Data paths
+src_train: data/train.es
+tgt_train: data/train.en
+src_val: data/valid.es
+tgt_val: data/valid.en
+
+# Training parameters
 batch_size: 32
+accum_steps: 1
 lr: 0.001
-max_steps: 3000000
-size: 10000
+max_epochs: 10
+max_steps: -1
+val_check_interval: 1.0
+
+# Data size (-1 for all data)
+size: -1
+
+# Continual learning (disabled for preliminary training)
+distillation: 0.0
+ewc: 0.0
+
+# Early stopping
 early_stop: true
 patience: 3
+
+# Experiment settings
 experiment: preliminary
 seed: 42

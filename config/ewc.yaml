@@ -1,0 +1,43 @@
+# Elastic Weight Consolidation (EWC) Configuration
+# This configuration combines EWC and knowledge distillation for continual learning
+# EWC prevents catastrophic forgetting by constraining important parameters
+
+# Model configuration (should be the model trained on the first task)
+model: Helsinki-NLP/opus-mt-es-en
+
+# Data paths for the second task
+src_train: data/train.es
+tgt_train: data/train.en
+src_val: data/valid.es
+tgt_val: data/valid.en
+
+# Data size (use large subset for better performance)
+size: 320000
+
+# Teacher model for knowledge distillation (same as the first task model)
+teacher: Helsinki-NLP/opus-mt-es-en
+
+# Knowledge distillation weight (λ_distill)
+distillation: 0.1
+
+# Fisher Information Matrix (precomputed using fim.py)
+fim: models/fisher.pth
+
+# EWC regularization strength (λ_EWC)
+# Higher values = stronger constraint on important parameters
+ewc: 2000
+
+# Training parameters
+batch_size: 16
+accum_steps: 2  # Gradient accumulation for effective batch size of 32
+lr: 1e-5  # Lower learning rate to avoid disrupting important parameters
+max_steps: 20000
+val_check_interval: 1000  # Validate every 1000 steps
+
+# Early stopping configuration
+early_stop: true
+patience: 3
+
+# Experiment settings
+experiment: ewc
+seed: 42

@@ -1,15 +1,32 @@
-teacher: Helsinki-NLP/opus-mt-es-en
-model: Helsinki-NLP/opus-mt-es-en
-src_train: data/train.es
-tgt_train: data/train.en
-src_val: data/valid.es
-tgt_val: data/valid.en
+# Knowledge Distillation Configuration
+# This configuration uses knowledge distillation to train on a second task
+# while maintaining performance on the first task
+
+# Teacher model (trained on the first task)
+teacher: logs/preliminary/final_model.pth
+
+# Student model initialization (starts from the teacher)
+load: logs/preliminary/final_model.pth
+
+# Knowledge distillation weight (λ_distill)
+# Controls the influence of teacher predictions via KL divergence
 distillation: 0.1
-batch_size: 16
-lr: 1e-5
-max_steps: 10000
-val_check_interval: 1000
+
+# Training parameters
+batch_size: 32
+lr: 0.001
+max_epochs: 10
+val_check_interval: 0.2  # Validate every 20% of an epoch
+
+# Data size (use subset for faster experiments)
+size: 10000
+
+# Early stopping configuration
 early_stop: true
 patience: 3
+
+# Experiment settings
 experiment: distillation
 seed: 42
+
+# Note: EWC is disabled (ewc: 0.0) - only distillation is used
