@@ -1,6 +1,6 @@
 # Continual Learning Backend
 
-A PyTorch-based framework for continual learning in neural machine translation (NMT) and computer vision tasks. This repository implements several continual learning techniques including Elastic Weight Consolidation (EWC) and Knowledge Distillation to mitigate catastrophic forgetting when training models on sequential tasks.
+A PyTorch-based framework for continual learning in neural machine translation (NMT) tasks. This repository implements several continual learning techniques including Elastic Weight Consolidation (EWC) and Knowledge Distillation to mitigate catastrophic forgetting when training models on sequential tasks.
 
 ## Features
 
