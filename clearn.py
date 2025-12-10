@@ -24,7 +24,7 @@ from configargparse import ArgParser
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 
 def parse_args():
-    parser = ArgParser()
+    parser = ArgParser(description="Continual Learning Training Script for NMT")
     parser.add_argument('--config', is_config_file=True, help='Config file path')
     parser.add_argument('--model', type=str, default=None, help='Path to load model checkpoint from')
     parser.add_argument('--src_train', type=str, required=True, help='Path to source training data')
